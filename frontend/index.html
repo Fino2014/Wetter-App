@@ -12,8 +12,12 @@
         <h1>WetterWise 🌤️</h1>
         <p>Hier entsteht eure KI-gestützte Wetter-App.</p>
         
-        <button id="wetter-btn">Wetter abrufen</button>
-        <p id="wetter-output"></p>
+        <div class="search-box">
+            <input type="text" id="stadt-input" placeholder="Stadt eingeben (z.B. Bochum)">
+            <button id="wetter-btn">Suchen</button>
+        </div>
+
+        <div id="wetter-output" class="output-box"></div>
     </div>
 
     <script src="script.js"></script>
