@@ -6,8 +6,11 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "ES2021",
+    "outDir": "./dist",
+    "rootDir": "./src",
     "sourceMap": true,
     "strictNullChecks": false,
     "noImplicitAny": false
-  }
+  },
+  "exclude": ["node_modules"]
 }
