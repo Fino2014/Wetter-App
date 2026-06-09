@@ -9,4 +9,4 @@ import { WeatherData } from './entities/weather-data.entity';
   providers: [WeatherService],
   controllers: [WeatherController],
 })
-export class WeatherModule {}
+export class AppModule {}

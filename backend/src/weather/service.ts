@@ -1,49 +1,44 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import axios from 'axios';
-import { WeatherData } from './entities/weather-data.entity';
 
 @Injectable()
 export class WeatherService {
-  // Minimale Stadt-Koordinaten-Map (erweiterbar)
-  private cityCoordinates = {
-    berlin: { lat: 52.52, lon: 13.41 },
-    münchen: { lat: 48.14, lon: 11.57 },
-    hamburg: { lat: 53.55, lon: 9.99 },
-  };
+  async getConsolidatedData(lat: string, lon: string) {
+    const latitude = parseFloat(lat);
+    const longitude = parseFloat(lon);
 
-  constructor(
-    @InjectRepository(WeatherData)
-    private weatherRepo: Repository<WeatherData>,
-  ) {}
+    if (isNaN(latitude) || isNaN(longitude)) {
+      throw new HttpException('Invalid parameters. Provide numeric lat and lon.', HttpStatus.BAD_REQUEST);
+    }
 
-  async getWeather(city: string) {
-    const coords = this.cityCoordinates[city.toLowerCase()];
-    if (!coords) throw new Error('Stadt nicht gefunden');
+    try {
+      // Weather forecast
+      const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m&hourly=temperature_2m,precipitation_probability,uv_index,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,wind_speed_10m_max&timezone=auto&forecast_days=7`;
+      
+      // Air quality + Pollen
+      const pollenUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&hourly=alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen,ragweed_pollen&timezone=auto&forecast_days=7`;
 
-    // Open-Meteo API (kein API-Key!)
-    const response = await axios.get(
-      `https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current_weather=true`,
-    );
+      const [weatherResponse, pollenResponse] = await Promise.all([
+        axios.get(weatherUrl),
+        axios.get(pollenUrl),
+      ]);
 
-    const weather = response.data.current_weather;
-
-    // Daten in DB speichern
-    await this.weatherRepo.save({
-      city,
-      temperature: weather.temperature,
-      windSpeed: weather.windspeed,
-      weatherCode: weather.weathercode,
-      latitude: coords.lat,
-      longitude: coords.lon,
-    });
-
-    return {
-      city,
-      temperature: weather.temperature,
-      windSpeed: weather.windspeed,
-      weatherCode: weather.weathercode,
-    };
+      return {
+        latitude: weatherResponse.data.latitude,
+        longitude: weatherResponse.data.longitude,
+        timezone: weatherResponse.data.timezone,
+        current: weatherResponse.data.current,
+        hourly_weather: weatherResponse.data.hourly,
+        daily_weather: weatherResponse.data.daily,
+        hourly_pollen: pollenResponse.data.hourly,
+        units: {
+          weather_units: weatherResponse.data.current_units,
+          pollen_units: pollenResponse.data.hourly_units,
+        },
+      };
+    } catch (error: any) {
+      console.error('Open-Meteo Fetch Error:', error.response?.data || error.message);
+      throw new HttpException('Failed to fetch weather data from upstream APIs.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }
