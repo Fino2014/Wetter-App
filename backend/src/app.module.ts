@@ -1,8 +1,21 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { WeatherModule } from './weather/weather.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [ConfigModule.forRoot(),WeatherModule],
+  imports: [
+    // Hier binden wir PostgreSQL und TypeORM ein
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',      
+      port: 5432,             
+      username: 'postgres',   
+      password: 'elisa', 
+      database: 'wetter_app', 
+      autoLoadEntities: true,
+      synchronize: true,      
+    }),
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
