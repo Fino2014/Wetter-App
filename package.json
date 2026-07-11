@@ -1,0 +1,21 @@
+{
+  "name": "wetter-app",
+  "version": "1.0.0",
+  "description": "KI-gestützte Wetter-App, die aktuelle Wetterdaten mit persönlichen Vorlieben wie Temperatur- und Pollenempfinden kombiniert. Beantwortet individuelle Fragen wie „Brauche ich heute Abend eine Jacke?“ basierend auf deinem Profil und der aktuellen Wetterlage.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fino2014/Wetter-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Fino2014/Wetter-App/issues"
+  },
+  "homepage": "https://github.com/Fino2014/Wetter-App#readme"
+}
