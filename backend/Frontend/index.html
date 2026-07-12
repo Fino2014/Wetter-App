@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WetterWise - Deine Wetter App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <h1>WetterWise 🌤️</h1>
+        <p>Echtzeit-Wetter & Personalisierte KI-Empfehlungen</p>
+        
+        <div class="input-section">
+            <input type="text" id="stadt-input" placeholder="Stadt eingeben (z.B. Bochum, Essen, Bocholt)" value="Bochum">
+        </div>
+
+        <div class="profile-section">
+            <h3>Mein Benutzerprofil:</h3>
+            <label><input type="checkbox" id="cold-sensitive"> Ich bin kälteempfindlich 🥶</label><br>
+            <label><input type="checkbox" id="sporty"> Ich bin sportlich aktiv 🏃‍♂️</label>
+        </div>
+        
+        <button id="wetter-btn">Wetter & Empfehlung abrufen</button>
+        
+        <p id="wetter-output"></p>
+
+        <hr style="border: 0; border-top: 1px dashed #ccc; margin: 20px 0;">
+
+        <div class="chat-section">
+            <h3>🤖 Frag WetterWise KI:</h3>
+            <input type="text" id="chat-input" placeholder="z.B. Gib mir eine Zusammenfassung für heute" style="width: 80%; padding: 10px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
+            <button id="chat-btn" style="background-color: #4a148c; color: white;">Frage stellen</button>
+            <p id="chat-output" style="margin-top: 10px; font-style: italic; color: #333;"></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

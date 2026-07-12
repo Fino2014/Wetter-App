@@ -7,6 +7,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+<<<<<<< HEAD
 import { WeatherModule } from './weather/weather.module';
 import { AiModule } from './ai/ai.module';
 import { WeatherData } from './weather/entities/weather-data.entity';
@@ -22,11 +23,38 @@ import { WeatherData } from './weather/entities/weather-data.entity';
       database: 'weather.db',
       entities: [WeatherData],
       synchronize: true,
+=======
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { WeatherController } from './weather.controller';
+import { WeatherService } from './weather.service';
+
+@Module({
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'elisa', // Nutze dein Passwort
+      database: 'wetter_app',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    // Sichere Pfadauflösung vom Hauptverzeichnis aus
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'Frontend'),
+>>>>>>> ca44d06c1bc14019f733b6df1f4fb3ddbee752ae
     }),
     // Wetter-Feature: stellt GET /weather bereit
     WeatherModule,
     // KI-Feature: stellt GET /ai/advice bereit
     AiModule,
   ],
+<<<<<<< HEAD
+=======
+  controllers: [WeatherController],
+  providers: [WeatherService],
+>>>>>>> ca44d06c1bc14019f733b6df1f4fb3ddbee752ae
 })
 export class AppModule {}
